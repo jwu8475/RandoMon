@@ -12,7 +12,7 @@ const CharacterCard = () => {
     setIsLoading(true);
     const id = Math.floor(Math.random() * 1017) + 1;
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      const response = await fetch('/api/random-pokemon');
       if (!response.ok) {
         throw new Error('Failed to fetch Pokemon data');
       }

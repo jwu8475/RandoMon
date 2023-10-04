@@ -9,7 +9,7 @@ const pokemonController = require('./controllers/pokemonController');
 app.use(express.json());
 
 app.get('/api/random-pokemon', pokemonController.getPokemon, (req, res) => {
-  res.send(200).json();
+  return res.status(200).json(res.locals);
 });
 
 app.get('/', (req, res) => {

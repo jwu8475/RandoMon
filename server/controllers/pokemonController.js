@@ -12,9 +12,9 @@ const pokemonController = {};
 
 
 pokemonController.getPokemon = async (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.query;
   try {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/1`);
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
     if (!response) {
       throw new Error('Failed to fetch Pokemon data');
     }
@@ -24,7 +24,7 @@ pokemonController.getPokemon = async (req, res, next) => {
     const allStats = {};
     const statArr = data.stats;
     for (let i = 0;i < statArr.length;i++) {
-      allStats[statArr[i].stat.name] = statArr[i].base_stat;
+      allStats[statArr[i].stat.name.replace('-', '_')] = statArr[i].base_stat;
     }
 
     // sets up pokemon types
@@ -40,8 +40,8 @@ pokemonController.getPokemon = async (req, res, next) => {
     res.locals.types = allTypes;
     res.locals.weight = data.weight;
     res.locals.move = data.moves[Math.floor(Math.random() * (data.moves.length))].move;
-    res.locals.picture = [ data.sprites.front_default, data.sprites.front_shiny ];
-
+    res.locals.id = id;
+    res.locals.pictures = [ data.sprites.front_default, data.sprites.front_shiny ];
     return next();
 
   } catch (error) {

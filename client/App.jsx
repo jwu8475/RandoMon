@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import CharacterCard from './components/CharacterCard';
-
+import PokemonLibrary from './libraryComponents/PokemonLibrary';
 
 export default function App() {
   return (
     <div className="App">
-      <h1>Pokemon Generator</h1>
-      <CharacterCard />
+      <main>
+        <Routes>
+          <Route path='/' element={<CharacterCard />} />
+          <Route path='/PokemonLibrary' element={<PokemonLibrary />}/>
+        </Routes>
+      </main>
     </div>
   );
 }

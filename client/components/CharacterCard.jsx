@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
+// import { Link } from 'react-router-dom';
+// import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 // import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 // import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
+
+import './CharacterCard.css';
 
 const CharacterCard = () => {
   const [ randomPokemon, setPokemonData ] = useState(null);
@@ -17,7 +19,6 @@ const CharacterCard = () => {
         throw new Error('Failed to fetch Pokemon data');
       }
       const data = await response.json();
-      console.log(data);
       setPokemonData(data);
     } catch (error) {
       console.error('Error fetching Pokemon data: ', error);
@@ -31,28 +32,17 @@ const CharacterCard = () => {
       fetchPokemonData();
     }
   }, [randomPokemon]);
-
-  const shinyPokemon = () => {
-    const shinyChance = 50; // 5%
-    if (Math.floor(Math.random() * 100) < shinyChance) {
-      if(randomPokemon.pictures[1]) {
-        return randomPokemon.pictures[1];
-      }
-    }
-    return randomPokemon.pictures[0];
-  };
-
   return (
     <div>
-      <h1>Random POKEMON</h1>
+      <h1>Pokemon Generator</h1>
       <button onClick={fetchPokemonData} disabled={isLoading}>
         {isLoading ? 'Loading...' : 'Get Random Pokemon'}
       </button>
       { randomPokemon && (
-        <article className="pokemon">
+        <article className={`pokemon ${randomPokemon.pictures.rarity}`}>
           <h1>{randomPokemon.name}</h1>
-          <h5>Pokdex # {randomPokemon.id}</h5>
-          <img src={shinyPokemon()} alt={randomPokemon.name} />
+          <h5>Pokdex # {randomPokemon.pokedexId}</h5>
+          <img src={randomPokemon.pictures[randomPokemon.pictures.rarity]} alt={randomPokemon.name} />
           <h5>Stats:</h5>
           <ul>
             <li>hp: {randomPokemon.stats.hp}</li>
@@ -62,10 +52,11 @@ const CharacterCard = () => {
             <li>special defense: {randomPokemon.stats.special_defense}</li>
             <li>speed: {randomPokemon.stats.speed}</li>
           </ul>
+          <p><b>Current Move:</b> <br />{randomPokemon.move[Math.floor(Math.random() * (randomPokemon.move.length))]}</p>
           <p><b>Type:</b> <br />{randomPokemon.types.join(', ')}</p>
-          <h5>Weight: <br />{randomPokemon.weight}</h5>
         </article>
       )}
+      <a href='/PokemonLibrary'>Pokemon Library!</a>
     </div>
   );
 };
